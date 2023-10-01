@@ -1,8 +1,13 @@
+"""
+make model arch here
+"""
 import torch
-from torch import nn 
+
+from torch import nn
 
 class TinyVGG(nn.Module):
-
+    """creates tinyvgg
+    """
     def __init__(self, input_shape: int, hidden_units: int, output_shape: int) -> None:
         super().__init__()
         self.conv_block_1 = nn.Sequential(
@@ -35,8 +40,4 @@ class TinyVGG(nn.Module):
         )
     
     def forward(self, x: torch.Tensor):
-        # x = self.conv_block_1(x)
-        # x = self.conv_block_2(x)
-        # x = self.classifier(x)
-        # return x
-        return self.classifier(self.block_2(self.block_1(x))) # <- leverage the benefits of operator fusion
+        return self.classifier(self.block_2(self.block_1(x))) #leverages the benefits of operator fusion
