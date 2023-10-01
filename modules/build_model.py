@@ -40,4 +40,4 @@ class TinyVGG(nn.Module):
         )
     
     def forward(self, x: torch.Tensor):
-        return self.classifier(self.block_2(self.block_1(x))) #leverages the benefits of operator fusion
+        return self.classifier(self.conv_block_2(self.conv_block_1(x))) #leverages the benefits of operator fusion
