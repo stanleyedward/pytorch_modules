@@ -82,7 +82,9 @@ def train(model: torch.nn.Module,
           optimizer: torch.optim.Optimizer,
           loss_fn: torch.nn.Module,
           epochs: int,
-          device: torch.device) -> Dict[str, List[float]]:
+          device: torch.device,
+          writer:torch.utils.tensorboard.SummaryWriter
+          ) -> Dict[str, List[float]]:
     """trains and tests model
 
     Args:
@@ -130,5 +132,22 @@ def train(model: torch.nn.Module,
         results["train_acc"].append(train_acc)
         results["test_loss"].append(test_loss)
         results["test_acc"].append(test_acc)
+      
+        # add results to SummaryWriter
+        if writer:
+            # Add results to SummaryWriter
+          writer.add_scalars(main_tag="Loss", 
+                               tag_scalar_dict={"train_loss": train_loss,
+                                                "test_loss": test_loss},
+                               global_step=epoch)
+          writer.add_scalars(main_tag="Accuracy", 
+                               tag_scalar_dict={"train_acc": train_acc,
+                                                "test_acc": test_acc}, 
+                               global_step=epoch)
 
+            # Close the writer
+          writer.close()
+        else:
+            pass
+    
     return results
