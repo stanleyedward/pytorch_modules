@@ -33,7 +33,7 @@ def create_dataloaders(
     )
     
     test_data = datasets.ImageFolder(
-        root=train_dir,
+        root=test_dir,
         transform=transform,
         target_transform=None
     )
