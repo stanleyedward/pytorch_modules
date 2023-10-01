@@ -1,3 +1,6 @@
+"""
+creates dataoaders from dir
+"""
 import os
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
@@ -11,6 +14,18 @@ def create_dataloaders(
     batch_size: int,
     num_workers: int = NUM_WORKERS
 ):
+    """creates train and test dataloaders
+
+    Args:
+        train_dir (str): _description_
+        test_dir (str): _description_
+        transform (transforms.Compose): _description_
+        batch_size (int): _description_
+        num_workers (int, optional): _description_. Defaults to NUM_WORKERS.
+
+    Returns:
+        Tuple(train_dataloader, test_dataloader, class_names): _description_
+    """
     train_data = datasets.ImageFolder(
         root=train_dir,
         transform=transform,
