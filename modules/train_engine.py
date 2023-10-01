@@ -83,7 +83,7 @@ def train(model: torch.nn.Module,
           loss_fn: torch.nn.Module,
           epochs: int,
           device: torch.device,
-          writer:torch.utils.tensorboard.SummaryWriter
+          writer:torch.utils.tensorboard.SummaryWriter = None
           ) -> Dict[str, List[float]]:
     """trains and tests model
 
