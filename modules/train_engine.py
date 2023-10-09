@@ -50,7 +50,7 @@ def test_step(model: torch.nn.Module,
     """test models for a single epoch
 
     Args:
-    model: .pth model
+    model: nn.Module instance
     dataloader: datalodaer
     loss_fn: nn.loss
     optimizer: torch.optim
