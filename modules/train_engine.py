@@ -109,6 +109,9 @@ def train(model: torch.nn.Module,
                "test_acc": []
     }
 
+    # model on target device
+    model.to(device)
+    
     for epoch in tqdm(range(epochs)):
         train_loss, train_acc = train_step(model=model,
                                           dataloader=train_dataloader,
