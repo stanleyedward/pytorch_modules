@@ -10,7 +10,7 @@ NUM_WORKERS = os.cpu_count()
 def create_dataloaders(
     train_dir: str,
     test_dir: str,
-    transform: transforms.Compose,
+    transforms: transforms.Compose,
     batch_size: int,
     num_workers: int = NUM_WORKERS
 ):
@@ -28,13 +28,13 @@ def create_dataloaders(
     """
     train_data = datasets.ImageFolder(
         root=train_dir,
-        transform=transform,
+        transform=transforms,
         target_transform=None
     )
     
     test_data = datasets.ImageFolder(
         root=test_dir,
-        transform=transform,
+        transform=transforms,
         target_transform=None
     )
     
