@@ -7,6 +7,7 @@ import torch
 
 from tqdm.auto import tqdm
 from torch.utils.tensorboard import SummaryWriter
+torch.set_default_device()
 def train_step(model: torch.nn.Module, 
                dataloader: torch.utils.data.DataLoader, 
                loss_fn: torch.nn.Module, 
@@ -24,7 +25,7 @@ def train_step(model: torch.nn.Module,
     Returns:
     Tuple(train_loss, train_acc)
     """
-
+    torch.set_default_device(device=device)
     model.train()
     train_loss, train_acc = 0, 0
     for batch, (X, y) in enumerate(dataloader):
@@ -59,6 +60,7 @@ def test_step(model: torch.nn.Module,
     Returns:
     Tuple(test_loss, test_acc)
     """
+    torch.set_default_device(device=device)
     model.eval() 
     test_loss, test_acc = 0, 0
     with torch.inference_mode():
@@ -108,7 +110,7 @@ def train(model: torch.nn.Module,
                "test_loss": [],
                "test_acc": []
     }
-
+    torch.set_default_device(device=device)
     # model on target device
     model.to(device)
     

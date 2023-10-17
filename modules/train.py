@@ -20,6 +20,7 @@ test_dir = "data/pizza_steak_sushi/test"
 
 # Ssetup target device
 device = "cuda" if torch.cuda.is_available() else "cpu"
+torch.set_default_device(device=device)
 
 # create transforms
 data_transform = transforms.Compose([
@@ -27,7 +28,7 @@ data_transform = transforms.Compose([
   transforms.ToTensor()
 ])
 
-# create DataLoaders with help from data_setup.py
+# create DataLoaders with help from data_setup.py for custom datasets
 train_dataloader, test_dataloader, class_names = data_preprocess.create_dataloaders(
     train_dir=train_dir,
     test_dir=test_dir,
@@ -42,6 +43,8 @@ model = build_model.TinyVGG(
     output_shape=len(class_names)
 ).to(device)
 
+# pytorch2.0 compile for graph monitoring and operator fusion
+model = torch.compile(model=model)
 # set loss and optimizer
 loss_fn = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(),
