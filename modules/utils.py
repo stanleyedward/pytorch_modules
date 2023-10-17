@@ -1,6 +1,9 @@
 """
 utils for saving
 """
+import torch
+import torchvision
+from torch import nn
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -357,4 +360,63 @@ def download_data(source: str,
             os.remove(data_path / target_file)
     
     return image_path
+
+def split_dataset(dataset:torchvision.datasets, split_size:float=0.2, seed:int=42):
+    """
+    randomly splits a given dataset into two proportions based on split_size and seed.
+
+    Args:
+        dataset (torchvision.datasets): A PyTorch Dataset, typically one from torchvision.datasets.
+        split_size (float, optional): How much of the dataset should be split? 
+            E.g. split_size=0.2 means there will be a 20% split and an 80% split. Defaults to 0.2.
+        seed (int, optional): Seed for random generator. Defaults to 42.
+
+    Returns:
+        tuple: (random_split_1, random_split_2) where random_split_1 is of size split_size*len(dataset) and 
+            random_split_2 is of size (1-split_size)*len(dataset).
+    """
+    # Create split lengths based on original dataset length
+    length_1 = int(len(dataset) * split_size) # desired length
+    length_2 = len(dataset) - length_1 # remaining length
+        
+    # Print out info
+    print(f"[INFO] Splitting dataset of length {len(dataset)} into splits of size: {length_1} ({int(split_size*100)}%), {length_2} ({int((1-split_size)*100)}%)")
+    
+    # Create splits with given random seed
+    random_split_1, random_split_2 = torch.utils.data.random_split(dataset, 
+                                                                   lengths=[length_1, length_2],
+                                                                   generator=torch.manual_seed(seed)) # set the random seed for reproducible splits
+    return random_split_1, random_split_2
+
+
+def create_effnetb2_model(num_classes:int=3, 
+                          seed:int=42):
+    """Creates an EfficientNetB2 feature extractor model and transforms.
+
+    Args:
+        num_classes (int, optional): number of classes in the classifier head. 
+            Defaults to 3.
+        seed (int, optional): random seed value. Defaults to 42.
+
+    Returns:
+        model (torch.nn.Module): EffNetB2 feature extractor model. 
+        transforms (torchvision.transforms): EffNetB2 image transforms.
+    """
+    # Create EffNetB2 pretrained weights, transforms and model
+    weights = torchvision.models.EfficientNet_B2_Weights.DEFAULT
+    transforms = weights.transforms()
+    model = torchvision.models.efficientnet_b2(weights=weights)
+
+    # Freeze all layers in base model
+    for param in model.parameters():
+        param.requires_grad = False
+
+    # Change classifier head with random seed for reproducibility
+    torch.manual_seed(seed)
+    model.classifier = nn.Sequential(
+        nn.Dropout(p=0.3, inplace=True),
+        nn.Linear(in_features=1408, out_features=num_classes),
+    )
+    
+    return model, transforms
 
