@@ -5,6 +5,7 @@ import torch
 import time
 from tqdm.auto import tqdm
 from typing import Dict, List, Tuple
+import torch.optim.lr_scheduler
 from torch.utils.tensorboard import SummaryWriter
 
 def train_step(epoch: int,
