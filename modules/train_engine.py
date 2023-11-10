@@ -13,7 +13,8 @@ def train_step(epoch: int,
                dataloader: torch.utils.data.DataLoader, 
                loss_fn: torch.nn.Module, 
                optimizer: torch.optim.Optimizer,
-               device: torch.device,
+               lr_scheduler: torch.optim.lr_scheduler,
+               device: torch.device.Device,
                disable_progress_bar: bool = False) -> Tuple[float, float]:
   """trains a pytorch model for a single epoch.
   (forward pass, loss calculation, optimizer step).
@@ -49,6 +50,9 @@ def train_step(epoch: int,
       optimizer.zero_grad()
       loss.backward()
       optimizer.step()
+      if lr_scheduler:
+        lr_scheduler.step()
+      
 
       # calculate and accumulate accuracy metric across all batches
       y_pred_class = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
