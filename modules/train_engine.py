@@ -13,8 +13,8 @@ def train_step(epoch: int,
                dataloader: torch.utils.data.DataLoader, 
                loss_fn: torch.nn.Module, 
                optimizer: torch.optim.Optimizer,
-               lr_scheduler: torch.optim.lr_scheduler = None,
                device: torch.device,
+               lr_scheduler: torch.optim.lr_scheduler = None,
                disable_progress_bar: bool = False) -> Tuple[float, float]:
   """trains a pytorch model for a single epoch.
   (forward pass, loss calculation, optimizer step).
@@ -130,10 +130,10 @@ def train(model: torch.nn.Module,
           train_dataloader: torch.utils.data.DataLoader, 
           test_dataloader: torch.utils.data.DataLoader, 
           optimizer: torch.optim.Optimizer,
-          lr_scheduler: torch.optim.lr_scheduler = None,
           loss_fn: torch.nn.Module,
           epochs: int,
           device: torch.device,
+          lr_scheduler: torch.optim.lr_scheduler = None,
           disable_progress_bar: bool = False,
           writer:torch.utils.tensorboard.SummaryWriter = None
           ) -> Dict[str, List]:
