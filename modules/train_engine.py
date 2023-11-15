@@ -14,7 +14,7 @@ def train_step(epoch: int,
                loss_fn: torch.nn.Module, 
                optimizer: torch.optim.Optimizer,
                lr_scheduler: torch.optim.lr_scheduler,
-               device: torch.device.Device,
+               device: torch.device,
                disable_progress_bar: bool = False) -> Tuple[float, float]:
   """trains a pytorch model for a single epoch.
   (forward pass, loss calculation, optimizer step).
