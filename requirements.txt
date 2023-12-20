@@ -3,3 +3,4 @@ torchvision
 torch
 pillow
 tqdm
+torchinfo
