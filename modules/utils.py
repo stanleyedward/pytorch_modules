@@ -3,6 +3,7 @@ utils for saving
 """
 import torch
 import torchvision
+import torchinfo
 from torch import nn
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,8 +11,8 @@ from pathlib import Path
 import requests
 import zipfile
 import os
+from typing import Tuple
 
-import torch
 from torch.utils.tensorboard import SummaryWriter
 
 def save_model(model: torch.nn.Module,
@@ -360,5 +361,23 @@ def download_data(source: str,
             os.remove(data_path / target_file)
     
     return image_path
+
+def model_summary(model: torch.nn.Module, input_size: Tuple):
+    """Writes a summary of the given model
+
+    Args:
+        model (torch.nn.Module): instance of a pytorch model 
+        input_size (Tuple): input dimensions of the forward pass
+        
+    Example usage:
+        model_summary(model=vision_transformer,
+                      input_size=(batch_size,1,197,768))
+    """
+    torchinfo.summary(model=model,
+                        input_size=input_size, 
+                        col_names=["input_size", 'output_size', 'num_params', 'trainable'],
+                        col_width=20,
+                        row_settings=['var_names']) 
+    
 
 
